@@ -8,6 +8,7 @@ angular.module("SistemaDeMusicas").controller("sistemaCtrl", function ($scope) {
             $scope.favoritos = []; 
             $scope.statusArtista = "";
             $scope.playlist = [];
+            $scope.playlists = [];
 
 
  
@@ -70,12 +71,13 @@ function Album(nomeAlbum, autorAlbum) {
   };
 
 
-function Favorito(nomeFavorito) {
-  this.nomeFavorito = nomeFavorito;
+function Favorito(artista) {
+  this.artista = artista;
 };
 
-$scope.adicionarAosFavoritos = function (artist) {
-  $scope.favoritos.push(artist);
+$scope.adicionarAosFavoritos = function (artista) {
+  var novoFavorito = new Favorito(artista);
+  $scope.favoritos.push(novoFavorito);
 
 };
 
@@ -90,9 +92,9 @@ const existeArtistaNosFavoritos = function (nomeDoArtista) {
 
 $scope.excluirFavorito = function (favorito) {
   for (i = 0; i < $scope.favoritos.length; i++) {
-    if ($scope.favoritos[i].nome == favorito.nome) {
+    if ($scope.favoritos[i] == favorito) {
       $scope.favoritos.splice(i,1);
-      alert("artista excluído dos favoritos com sucesso");
+      alert("Artista excluído dos favoritos com sucesso");
     }
   }
 };
@@ -177,14 +179,17 @@ $scope.adicionarMusicaNaPlaylist = function(musica) {
   };
 
 function Playlist(nome) {
-  this.playlist = [];
+  this.musicas = [];
   this.nome = nome;
+  this.quantidade = 0;
 
   this.adicionarMusicaNaPlaylist = function (playlist, musica) {
     $scope.playlist.adicionarMusicaNaPlaylist(musica);
     delete musica;
   }
 };
+
+
 
 $scope.excluirMusicaPlaylist = function (musica) {
   for (i = 0; i < $scope.playlist.length; i++) {
@@ -205,7 +210,7 @@ $scope.excluirPlaylist = function (playlist) {
 };
 
 
-/*$scope.verificaPlaylist = function (nomePlaylist) {
+$scope.verificaPlaylist = function (nomePlaylist) {
     for (i = 0; i < $scope.playlists.length; i++) {
       if ($scope.playlists[i].nome == nomePlaylist) {
         alert("Playlist já existe!!");
@@ -217,8 +222,9 @@ $scope.excluirPlaylist = function (playlist) {
         $scope.playlists.push(novaPlaylist);
         return newPLaylist;
     }
+    }
 
-};*/
+};
 
 $scope.retornaMusicasPlaylist = function (playlist) {
     return playlist.playlist;
@@ -234,15 +240,18 @@ $scope.retornaPlaylists = function (nomePlaylist) {
   return playlist;
 };
 
-/*$scope.pesquisarArtista = function(nome){
-  for (var i = 0; i < artistas.length; i++) {
-    if(artistas[i].nomeArtista === nome){
-
-    }
-  }
-
+$scope.pesquisarArtista = function(buscaArtista){
+  alert($scope.artistas[0].nomeArtista);
+  var artistaPesquisado = $scope.artistas.filter(function(buscaArtista){
+    if($scope.artistas.nomeArtista ===  buscaArtista)
+      return nomeArtista;
+  });
+  return artistaPesquisado;
+  delete $scope.artista1;
   
-  };*/
+  };
+
+
 
 
 });
