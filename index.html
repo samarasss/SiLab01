@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html ng-app="SistemaDeMusicas">
+
+  <head>
+
+    <meta charset="utf-8">
+    <title>SistemaDeMusicas</title>
+
+    <link rel="stylesheet" href="./lib/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="./css/modo.css">
+
+    
+    <script src="lib/angular/angular.js"></script>
+    <script src="js/controller.js"></script>
+  </head>
+
+ <body background="imagem/imagem3.jpg" class="center-block container text-center" ng-controller="sistemaCtrl">
+
+<nav class="navbar navbar-default navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">{{app}}</a>
+            <a class="navbar-btn btn btn" href="#" onclick="location.href = 'https://github.com/samarasss/SiLab1';">Meu repositório do GitHub.com</a>
+        </div>
+    </div>
+</nav>
+
+<input class="form-control" type="text" ng-model="nome" name="nome" placeholder="Digite o nome do artista que quer pesquisar: "/>
+<button class="btn btn-primary btn-block" ng-click="pesquisarArtista(nome)" ng-disabled="nome.length == 0">Pesquisar Artista</button>
+
+
+<p> </p>
+
+ <div class="jumbotron">
+        <input class="form-control" type="text" ng-model="nomeArtista" placeholder="Artista"/>
+        <input class="form-control" type="text" ng-model="imagemArtista" placeholder="Imagem"/>
+        <button class="btn btn-primary btn-block " ng-click="adicionarArtista(nomeArtista, imagemArtista)">Adicionar Artista</button>
+
+
+
+    </div>
+
+     <div class="jumbotron">
+
+      <input class="form-control" type="text" ng-model="nomeMusica"  placeholder="Música"/>
+      <input class="form-control" type="text" ng-model="artistaMusica" placeholder="Cantor"/>
+      <input class="form-control" type="text" ng-model="duracao" ng-required = "duracao" placeholder="Duração"/>
+      <input class="form-control" type="text" ng-model="anoLancamento" ng-required = "anoLancamento" placeholder="Ano de Lançamento"/>
+      <input class="form-control" type="text" ng-model="albumMusica" ng-required = "albumMusica" placeholder="Album que deseja adicionar"/>
+
+      <button class="btn btn-primary btn-block" ng-click="adicionarMusica(nomeMusica, artistaMusica, albumMusica, anoLancamento, duracao)"> Adicionar Musica</button>
+
+     </div>
+
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Área de Pesquisa</a>
+        </div>
+    </div>
+    <table class="table">
+       <!-- <h1 ng-if="!verificarArtistaExiste()" class="naoencontrou">Artista não encontrado</h1> -->
+        <tr ng-repeat="artista in artistas">
+            <td>{{artista.nome}}</td>
+           <!-- <td><img ng-src="{{serie.Poster !== 'N/A' ? serie.Poster:'http://mteliza.vic.cricket.com.au/files/819/images/imageNotAvailable.jpg'}}" height="300" width="200"></td>-->
+            <td><button type="submit"  class="btn-success" ng-click="adicionarAosFavoritos(artista)">Adicionar aos Favoritos</button></td>
+        </tr>
+    </table>
+</nav>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Artistas</a>
+        </div>
+    </div>
+    <table class="table table-striped">
+            <tr>
+                <th>Artista</th>
+                <th>imagem</th>
+            </tr>
+            <tr ng-repeat="artista in artistas">
+                <td>{{nomeArtista}}</td>
+                <img ng-src="{{imagemArtista}}" modo="width:160px;height:160px;">
+
+            <td><button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#informacoesDoArtista{{$index}}">Mais Informações</button></td>
+            <td><button type="submit"  class="btn-danger" ng-click="excluirFavorito(artista)">Remover dos Favoritos</button></td>
+            <td>
+                <div id="informacoesDoArtista{{$index}}" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title alinhacentro">{{artista.nome}}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-70 alinhacentro">
+                                        <img id="imagesize" src="{{serie.Poster !== 'N/A' ? serie.Poster:'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg'}}" alt="Lights">
+                                    </div>
+                                   
+                                    <div class="col-md-70 info alinhacentro">
+                                        <p><b>Média:</b> {{artista.imdbRating}}</p>
+                                        <p><b>Classificação:</b> {{artista.Rated}}</p>
+                                        <div class="input-group input alinhacentro">
+                                            <input ng-model="nota" type="text" class="form-control" placeholder="Exemplo: 7.8">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-basic" type="submit" ng-click="avaliarArtista(artista,nota)">
+                                                    <i>Ok</i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <p><b>Sua Nota:</b> {{artista.avaliacaoUsuario}}</p>
+                                        <div class="input-group input alinhacentro">
+                                            <input ng-model="lastep" type="text" class="form-control" placeholder="Exemplo: S2-E3">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-basic" type="submit" ng-click="alterarUltimaMusica(artista,lastep)">
+                                                    <i>Ok</i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <p><b>Última Música Ouvida:</b> {{artista.ultimaMusica}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</nav>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Favoritos</a>
+        </div>
+    </div>
+    <div id="Favoritos">
+        <table ng-show="favoritos.length > 0" class="table">
+            <tr ng-repeat="serie in watchlist">
+                <td> </td>
+                <td>{{artista.nome}}</td>
+                <td><img ng-src="{{serie.Poster !== 'N/A' ? serie.Poster:'http://mteliza.vic.cricket.com.au/files/819/images/imageNotAvailable.jpg'}}" height="300" width="200"></td>
+                <td><button type="submit"  class="btn-success" ng-click="transferirSerie(serie)">Adicionar ao Perfil</button></td>
+                <td><button type="submit"  class="btn-danger" ng-click="apagarSerieDoWatchlist(serie)">Remover do Watchlist</button></td>
+            </tr>
+        </table>
+    </div>
+
+
+
+
+
+
+  </body>
+  <footer class="progress">
+    Copyright © 2017. Programa criado por Samara Sonale Santos Sampaio.
+</footer>
+</html>
