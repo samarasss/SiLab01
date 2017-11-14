@@ -8,7 +8,6 @@ angular.module("SistemaDeMusicas").controller("sistemaCtrl", function ($scope) {
             $scope.favoritos = []; 
             $scope.statusArtista = "";
             $scope.playlist = [];
-            $scope.playlists = [];
             $scope.album = [];
 
 
@@ -49,27 +48,63 @@ function Album(nomeAlbum, autorAlbum) {
     this.autorAlbum = autorAlbum;
 
     this.adicionar = function(musica) {
+      if($scope.checarMusica(musica.nome)){
+        alert("Música já existente no álbum");
+        delete $scope.musica;
+      }
+      else{
+        this.musicas.push(musica);
+         alert("Musica adicionada no sistema");
+      }
+    }
+
      
-      if(this.checarMusica(musica.nome)){
+     /* if(this.checarMusica(, musica.nome)){
         alert("Música já existente no álbum");
         delete $scope.musica;
       } else {
-        $scope.musicas.push(musica);
+        this.musicas.push(musica);
         $scope.musicas.push(angular.copy(musica));
-        delete $scope.musica;
-    }
+        delete $scope.musica;*/
 
-    this.checarMusica = function (musicas, nomeMusica) {
-    for (i = 0; i < musicas.length; i++) {
-        if (musicas[i].nome ===  nomeMusica) {
+    
+};
+
+  $scope.adicionarMusica = function(nomeMusica, artistaMusica, albumMusica, anoLancamento, duracao) {
+    var album = new Album(retornaAlbum());
+    var newMusica = new Musica(nomeMusica,artistaMusica,albumMusica,anoLancamento,duracao);
+    album = retornaAlbum(newMusica.nomeAlbum, newMusica.artistaMusica);
+    album.adicionar(newMusica);
+    $scope.musicas.push(newMusica);
+   
+    delete $scope.nomeMusica;
+    delete $scope.artistaMusica;
+    delete $scope.albumMusica;
+    delete $scope.anoLancamento;
+    delete $scope.duracao;
+};
+
+$scope.checarMusica = function (nomeMusica) {
+    for (i = 0; i < this.musicas.length; i++) {
+        if (this.musicas[i].nome ===  nomeMusica) {
             return true;
         }
     }
-          return false;
-}
-    }
-  };
+    return false;
 
+    
+};
+
+ retornaAlbum = function (nomeAlbum, autor) {
+    for (i = 0; i < $scope.albuns.length; i++) {
+      if ($scope.albuns[i].nomeAlbum == nomeAlbum) {
+        return $scope.albuns[i];
+      }
+    }
+    var novoAlbum = new Album(nomeAlbum, autor);
+    $scope.albuns.push(novoAlbum);
+    return novoAlbum;
+};
 
 function Favorito(artista) {
   this.artista = artista;
@@ -100,17 +135,7 @@ $scope.excluirFavorito = function (favorito) {
 };
 
 
-  retornaAlbum = function (nomeAlbum, autor) {
-    for (i = 0; i < $scope.albuns.length; i++) {
-      if ($scope.albuns[i].nomeAlbum == nomeAlbum) {
-        return $scope.albuns[i];
-      }
-    }
-    var novoAlbum = new Album(nomeAlbum, autor);
-    $scope.albuns.push(novoAlbum);
-    return novoAlbum;
-};
-
+ 
 $scope.retornaAlbuns = function (autor) {
   album = [];
   for (i = 0; i < $scope.albuns.length; i++) {
@@ -125,23 +150,6 @@ $scope.verificaTable = function (array) {
     return array.length > 0;
 };
 
-$scope.adicionarMusica = function(musica) {
-   /* var album = new Album(retornaAlbum());
-    var newMusica = new Musica(nomeMusica,artistaMusica,albumMusica,anoLancamento,duracao);
-    album.push(newMusica);
-    alert("Musica adicionada no sistema");
-    delete nomeMusica;
-    delete artistaMusica;
-    delete albumMusica;
-    delete anoLancamento;
-    delete duracao;
-    */
-   
-    album = retornaAlbum(musica.nomeMusica, musica.artistaMusica);
-    album.adicionar(angular.copy(musica));
-    delete musica;
-
-};
 
 
 $scope.checarArtista = function(nomeArtista) {
@@ -175,24 +183,23 @@ $scope.alterarUltimaMusica = function (artista, musica) {
     };
 
 $scope.adicionarMusicaNaPlaylist = function(musica) {
-    if (checarMusica(this.playlist, musica.nome)) {
+    if ($scope.checarMusica(this.playlist, musica.nome)) {
       alert("Música já existente na playlist!!!");
     } else {
       this.playlist.push(musica);
-      $scope.playlist.push(angular.copy(musica));
     }
   };
 
-function Playlist(nome) {
+/*function Playlist(nome) {
   this.musicas = [];
   this.nome = nome;
   this.quantidade = 0;
 
-  this.adicionarMusicaNaPlaylist = function (playlist, musica) {
+  this.adicionarMusicaNaPlaylist = function (musica) {
     $scope.playlist.adicionarMusicaNaPlaylist(musica);
     delete musica;
   }
-};
+};*/
 
 
 
@@ -245,18 +252,24 @@ $scope.retornaPlaylists = function (nomePlaylist) {
   return playlist;
 };
 
-$scope.pesquisarArtista = function(buscaArtista){
-  alert($scope.artistas[0].nomeArtista);
-  var artistaPesquisado = $scope.artistas.filter(function(buscaArtista){
-    if($scope.artistas.nomeArtista ===  buscaArtista)
-      return nomeArtista;
-  });
-  return artistaPesquisado;
-  delete $scope.artista1;
-  
-  };
+$scope.retornaPlaylists = function (nomePlaylist) {
+  playlist = [];
+  for (i = 0; i < $scope.playlists.length; i++) {
+    if ($scope.playlists[i].nome == nomePlaylist) {
+      playlist.push($scope.playlists[i]);
+    }
+  }
+  return playlist;
+};
 
-
-
+$scope.pesquisaArtista = function(nomeArtista) {
+  for (i = 0; i < $scope.artistas.length; i++) {
+          if (nomeArtista === $scope.artistas[i].nome) {
+            return $scope.artistas[i];
+          }
+              
+  return null;
+  }
+};
 
 });

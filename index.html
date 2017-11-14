@@ -21,12 +21,12 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">{{app}}</a>
-            <a class="navbar-btn btn btn" href="#" onclick="location.href = 'https://github.com/samarasss/SiLab1';">Meu repositório do GitHub.com</a>
+            <a class="navbar-btn btn btn" href="#" onclick="location.href = 'https://github.com/samarasss/SiLab01';">Meu repositório do GitHub.com</a>
         </div>
     </div>
 </nav>
 
-    <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="Digite o nome do artista que quer pesquisar: "/>
+    <!--<input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="Digite o nome do artista que quer pesquisar: "/>
     <table ng-show="artistas.length > 0" class="table table-striped">
          <tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="artista in artistas | filter:criterioDeBusca">
 
@@ -56,7 +56,7 @@
       <input class="form-control" type="text" ng-model="anoLancamento" ng-required = "anoLancamento" placeholder="Ano de Lançamento"/>
       <input class="form-control" type="text" ng-model="albumMusica" ng-required = "albumMusica" placeholder="Album que deseja adicionar"/>
 
-      <button class="btn btn-primary btn-block" ng-click="adicionarMusica(nomeMusica, artistaMusica, albumMusica, anoLancamento, duracao)"> Adicionar Musica</button>
+      <button class="btn btn-primary btn-block" ng-click="adicionarMusica(nomeMusica, artistaMusica, albumMusica, anoLancamento, duracao)" ng-disabled = "!nomeMusica || !artistaMusica || !duracao || !anoLancamento ||!albumMusica"> Adicionar Musica</button>
 
      </div>
 
@@ -69,13 +69,28 @@
 
 
     </div>-->
-    <nav class="navbar navbar-default">
+
+<nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Área de Pesquisa</a>
         </div>
     </div>
-   
+    <input class="form-control" type="text" ng-model="artista" placeholder="Digite o nome do artista que quer pesquisar: "/>
+    <button type="button" class="btn btn-primary btn-block" ng-click="pesquisarArtista(artista)">Digite o nome do artista que quer pesquisar</button>
+    <table class="table table-striped">
+
+
+            <tr>
+                <th class="nomeColuna">Artista</th>
+                
+            </tr>
+         
+            <tr ng-repeat="artista in pesquisarArtista(artista) | filter:nomeArtistaBuscado">
+        <td class="blocoNome"><span data-toggle="modal" data-target = "#infoArtista" ng-click="selecionar(artista)" >{{artista.nomeArtista}}</span></td>
+
+        
+    </table>
 </nav>
 
 
@@ -87,58 +102,14 @@
     </div>
     <table class="table table-striped">
             <tr>
-                <th>Artista</th>
-                <th>Imagem</th>
-                <th></th>
+                <th class="nomeColuna">Artista</th>
+                <th class="nomeColuna">Imagem</th>
+                <th class="nomeColuna"></th>
             </tr>
             <tr ng-repeat="artista in artistas">
                 <td>{{artista.nomeArtista}}</td>
-                <td><img ng-src="{{artista.imagemArtista}}" class="imagemArtista"></td>
+                <td><img ng-src="{{artista.imagemArtista}}"  width="80" height="90" class="imagemArtista"></td>
                 <td><button type="button"  class="btn btn-success btn-block" ng-click="adicionarAosFavoritos(artista)">Adicionar aos Favoritos</button></td>
-                <div id="informacoesDoArtista{{$index}}" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-lg">
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title alinhacentro">{{artista.nome}}</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                 
-                                   
-                                    <div class="col-md-70 info alinhacentro">
-                                        <p><b>Média:</b> {{artista.imdbRating}}</p>
-                                        <p><b>Classificação:</b> {{artista.Rated}}</p>
-                                        <div class="input-group input alinhacentro">
-                                            <input ng-model="nota" type="text" class="form-control" placeholder="Exemplo: 7.8">
-                                            <div class="input-group-btn">
-                                                <button class="btn btn-basic" type="submit" ng-click="avaliarArtista(artista,nota)">
-                                                    <i>Ok</i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <p><b>Sua Nota:</b> {{artista.avaliacaoUsuario}}</p>
-                                        <div class="input-group input alinhacentro">
-                                            <input ng-model="lastep" type="text" class="form-control" placeholder="Exemplo: S2-E3">
-                                            <div class="input-group-btn">
-                                                <button class="btn btn-basic" type="submit" ng-click="alterarUltimaMusica(artista,lastep)">
-                                                    <i>Ok</i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <p><b>Última Música Ouvida:</b> {{artista.ultimaMusica}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </td>
-        </tr>
     </table>
 </nav>
 
@@ -150,15 +121,87 @@
     </div>
     <table class="table table-striped">
             <tr>
-                <th>Artista</th>
-                <th>Imagem</th>
-                <th></th>
+                <th class="nomeColuna">Artista</th>
+                <th class="nomeColuna">Imagem</th>
+                <th class="nomeColuna"></th>
             </tr>
             <tr ng-repeat="favorito in favoritos">
                 <td>{{favorito.artista.nomeArtista}}</td>
-                <td><img ng-src="{{favorito.artista.imagemArtista}}" class="imagemArtista"></td>
+                <td><img ng-src="{{favorito.artista.imagemArtista}}" width="80" height="90" class="imagemArtista"></td>
             <td><button type="button"  class="btn btn-danger btn-block" ng-click="excluirFavorito(favorito)">Excluir dos Favoritos</button></td>
+    </table>
+</nav>
+
+<!--<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Músicas</a>
+        </div>
     </div>
+    <table class="table table-striped">
+            <tr>
+                <th>Nome</th>
+                <th>Artista</th>
+                <th>Duração</th>
+                <th>Ano de Lançamento</th>
+                <th>Album</th>
+            </tr>
+            <tr ng-repeat="musica in musicas">
+                <td>{{musica.nome}}</td>
+                <td>{{musica.artista}}</td>
+                <td>{{musica.duracao}}</td>
+                <td>{{musica.anoLancamento}}</td>
+                <td>{{musica.album}}</td>
+</nav>-->
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Músicas</a>
+        </div>
+    </div>
+    <table class="table table-striped">
+            <tr>
+                <th>Nome</th>
+                <th>Artista</th>
+                <th>Duração</th>
+                <th>Ano de Lançamento</th>
+                <th>Album</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="musica in musicas">
+                <td>{{musica.nome}}</td>
+                <td>{{musica.artista}}</td>
+                <td>{{musica.duracao}}</td>
+                <td>{{musica.anoLancamento}}</td>
+                <td>{{musica.album}}</td>
+                <td><button type="button"  class="btn btn-success btn-block" ng-click="adicionarMusicaNaPlaylist(musica)">Adicionar à Playlist</button></td>
+    </table>
+</nav>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Playlist</a>
+        </div>
+    </div>
+    <table class="table table-striped">
+            <tr>
+                <th>Nome</th>
+                <th>Artista</th>
+                <th>Duração</th>
+                <th>Ano de Lançamento</th>
+                <th>Album</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="musica in playlist">
+                <td>{{musica.nome}}</td>
+                <td>{{musica.artista}}</td>
+                <td>{{musica.duracao}}</td>
+                <td>{{musica.anoLancamento}}</td>
+                <td>{{musica.album}}</td>
+                <td><button type="button"  class="btn btn-danger btn-block" ng-click="excluirMusicaPlaylist(musica)">Remover da Playlist</button></td>
+    </table>
 </nav>
 
 
@@ -182,26 +225,7 @@
     </div>
 </nav>-->
 
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Músicas</a>
-        </div>
-    </div>
-    <table class="table table-striped">
-            <tr>
-                <th>Nome</th>
-                <th>Artista</th>
-                <th>Duração</th>
-                <th>Ano de Lançamento</th>
-                <th>Album</th>
-                <th></th>
-            </tr>
-            <tr ng-repeat="album in albuns">
-                <td>{{album.musicas.nomeMusica}}</td>
-                
-    </div>
-</nav>
 
-  </body>
+
+</body>
 </html>
