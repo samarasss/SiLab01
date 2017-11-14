@@ -69,6 +69,14 @@
 
 
     </div>-->
+    <nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Área de Pesquisa</a>
+        </div>
+    </div>
+   
+</nav>
 
 
 <nav class="navbar navbar-default">
@@ -153,21 +161,7 @@
     </div>
 </nav>
 
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Área de Pesquisa</a>
-        </div>
-    </div>
-    <table class="table">
-       <!-- <h1 ng-if="!verificarArtistaExiste()" class="naoencontrou">Artista não encontrado</h1> -->
-        <tr ng-repeat="artista in artistas">
-            <td>{{artista.nome}}</td>
-           <!-- <td><img ng-src="{{serie.Poster !== 'N/A' ? serie.Poster:'http://mteliza.vic.cricket.com.au/files/819/images/imageNotAvailable.jpg'}}" height="300" width="200"></td>-->
-            <td><button type="submit"  class="btn-success" ng-click="adicionarAosFavoritos(artista)">Adicionar aos Favoritos</button></td>
-        </tr>
-    </table>
-</nav>
+
 
 <!--<nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -186,7 +180,7 @@
                 <td><img ng-src="{{favorito.artista.imagemArtista}}" class="imagemArtista"></td>
             <td><button type="button"  class="btn btn-danger btn-block" ng-click="excluirFavorito(favorito)">Excluir dos Favoritos</button></td>
     </div>
-</nav>
+</nav>-->
 
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -203,12 +197,11 @@
                 <th>Album</th>
                 <th></th>
             </tr>
-            <tr ng-repeat="musicas in favoritos">
-                <td>{{favorito.artista.nomeArtista}}</td>
-                <td><img ng-src="{{favorito.artista.imagemArtista}}" class="imagemArtista"></td>
-            <td><button type="button"  class="btn btn-danger btn-block" ng-click="excluirFavorito(favorito)">Excluir dos Favoritos</button></td>
+            <tr ng-repeat="album in albuns">
+                <td>{{album.musicas.nomeMusica}}</td>
+                
     </div>
 </nav>
--->
+
   </body>
 </html>

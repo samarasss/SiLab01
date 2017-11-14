@@ -9,6 +9,8 @@ angular.module("SistemaDeMusicas").controller("sistemaCtrl", function ($scope) {
             $scope.statusArtista = "";
             $scope.playlist = [];
             $scope.playlists = [];
+            $scope.album = [];
+
 
 
  
@@ -48,13 +50,13 @@ function Album(nomeAlbum, autorAlbum) {
 
     this.adicionar = function(musica) {
      
-  if(this.checarMusica(musica.nome)){
-          alert("Música já existente no álbum");
-          delete $scope.musica;
-    } else {
-          $scope.musicas.push(musica);
-          $scope.musicas.push(angular.copy(musica));
-          delete $scope.musica;
+      if(this.checarMusica(musica.nome)){
+        alert("Música já existente no álbum");
+        delete $scope.musica;
+      } else {
+        $scope.musicas.push(musica);
+        $scope.musicas.push(angular.copy(musica));
+        delete $scope.musica;
     }
 
     this.checarMusica = function (musicas, nomeMusica) {
@@ -65,9 +67,7 @@ function Album(nomeAlbum, autorAlbum) {
     }
           return false;
 }
-    var album = new Album(nomeAlbum, autorAlbum);
-    console.log(album.checarMusica(album, nomeMusica));
-  }
+    }
   };
 
 
@@ -100,7 +100,7 @@ $scope.excluirFavorito = function (favorito) {
 };
 
 
-$scope.retornaAlbum = function (nomeAlbum, autor) {
+  retornaAlbum = function (nomeAlbum, autor) {
     for (i = 0; i < $scope.albuns.length; i++) {
       if ($scope.albuns[i].nomeAlbum == nomeAlbum) {
         return $scope.albuns[i];
@@ -125,17 +125,22 @@ $scope.verificaTable = function (array) {
     return array.length > 0;
 };
 
-$scope.adicionarMusica = function(nomeMusica, artistaMusica, albumMusica, anoLancamento, duracao) {
-    album = retornaAlbum(albumMusica, artistaMusica);
+$scope.adicionarMusica = function(musica) {
+   /* var album = new Album(retornaAlbum());
     var newMusica = new Musica(nomeMusica,artistaMusica,albumMusica,anoLancamento,duracao);
-    album.adicionar(newMusica);
+    album.push(newMusica);
     alert("Musica adicionada no sistema");
     delete nomeMusica;
     delete artistaMusica;
     delete albumMusica;
     delete anoLancamento;
     delete duracao;
-    
+    */
+   
+    album = retornaAlbum(musica.nomeMusica, musica.artistaMusica);
+    album.adicionar(angular.copy(musica));
+    delete musica;
+
 };
 
 
